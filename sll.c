@@ -147,11 +147,6 @@ NODE concat(NODE first, NODE second)
 
 NODE clear(NODE first)
 {
-	if(first==NULL)
-	{
-		printf("Empty\n");
-		return NULL;
-	}
 	NODE prev,cur=first;
 	while(cur!=NULL)
 	{
@@ -162,13 +157,63 @@ NODE clear(NODE first)
 	return NULL;
 }
 
+void search(NODE first)
+{
+	if(first==NULL)
+	{
+		printf("No elements\n");
+		return;
+	}
+	printf("Enter the search value\n");
+	int key,count=0;
+	scanf("%d",&key);
+	NODE cur=first;
+	while(cur!=NULL)
+	{
+		count++;
+		if(key==cur->info)
+		{
+			printf("element found at pos %d\n",count);
+			return;
+		}
+		cur=cur->link;
+	}
+	printf("Element not found\n");
+}
+
+NODE insert(NODE first,int elem, int pos)
+{
+	if(pos<=0)
+		return insert_front(first,elem);
+	if(first==NULL)
+		return insert_front(first,elem);
+	int length=count(first);
+	printf("%d,%d\n",pos,length);
+	if(pos>=length)
+		return insert_rear(first,elem);
+	printf("check1\n");
+	NODE temp,cur=first;
+	temp=getNode();
+	temp->info=elem;
+	while(pos>1)
+	{
+		pos--;
+		cur=cur->link;
+	}
+	printf("check1-%d\n",cur->info);
+	temp->link=cur->link;
+	cur->link=temp;
+	return first;
+}
+
 int main()
 {
   NODE first=NULL,second,third;
-  int elem,ch;
+  int elem,ch,pos;
   while(1)
   {
      printf("\n\n1.InsFr\n2.InsRe\n3.DelFr\n4.Delre\n5.display\n6.count\n7.copy\n8.concat\n-1.Clear SLL\n");
+     printf("9.Search\n");
      scanf("%d",&ch);
      switch(ch)
      {
@@ -208,6 +253,18 @@ int main()
         case 8:
         third=concat(first,second);
         display(third);
+        break;
+        
+        case 9:
+        search(first);
+        break;
+        
+        case 10:
+        printf("Enter the element\n");
+        scanf("%d",&elem);
+        printf("Enter the index\n");
+        scanf("%d",&pos);
+        first=insert(first,elem,pos);
         break;
         
         case -1:
