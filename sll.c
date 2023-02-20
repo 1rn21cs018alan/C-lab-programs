@@ -8,7 +8,24 @@ struct node
 };
 
 typedef struct node * NODE;
-
+NODE getNode();
+NODE insert_front(NODE first,int elem);
+NODE delete_front(NODE first);
+NODE insert_rear(NODE first,int elem);
+NODE delete_rear(NODE first);
+void display(NODE first);
+int count(NODE first);
+NODE copy(NODE first);
+NODE concat(NODE first, NODE second);
+NODE clear(NODE first);
+void search(NODE first);
+NODE insert(NODE first,int elem, int pos);
+NODE delete(NODE first, int pos);
+NODE push(NODE first,int elem);
+NODE pop(NODE first);
+NODE queue_insert(NODE first,int elem);
+NODE queue_delete(NODE first);
+//////////////////////////////////////
 NODE getNode()
 {
 	NODE x;
@@ -188,10 +205,10 @@ NODE insert(NODE first,int elem, int pos)
 	if(first==NULL)
 		return insert_front(first,elem);
 	int length=count(first);
-	printf("%d,%d\n",pos,length);
+//	printf("%d,%d\n",pos,length);
 	if(pos>=length)
 		return insert_rear(first,elem);
-	printf("check1\n");
+	//printf("check1\n");
 	NODE temp,cur=first;
 	temp=getNode();
 	temp->info=elem;
@@ -200,20 +217,106 @@ NODE insert(NODE first,int elem, int pos)
 		pos--;
 		cur=cur->link;
 	}
-	printf("check1-%d\n",cur->info);
+	//printf("check1-%d\n",cur->info);
 	temp->link=cur->link;
 	cur->link=temp;
 	return first;
 }
 
+NODE delete(NODE first, int pos)
+{
+	if(first==NULL)
+	{
+		printf("No elements\n");
+		return NULL;
+	}
+	if(pos<=0)
+		return delete_front(first);
+	int length;
+	length=count(first);
+	//printf("%d,%d\n",pos,length);
+	if(pos>=length-1)
+		return delete_rear(first);
+	
+	//printf("check1\n");
+	NODE temp=first,cur=first;
+	while(pos--)
+	{
+		//printf("loopchk1");
+		temp=cur;
+		cur=cur->link;
+	}
+	printf("%d deleted \n",cur->info);
+	temp->link=cur->link;
+	free(cur);
+	return first;
+}
+
+NODE push(NODE first,int elem)
+{
+	NODE temp;
+	temp=getNode();
+	temp->info=elem;
+	temp->link=first;
+	return temp;
+}
+NODE pop(NODE first)
+{
+	if(first==NULL)
+	{
+		printf("Underflow\n");
+		return NULL;
+	}
+	printf("%d poped\n",first->info);
+	NODE temp=first->link;
+	free(first);
+	return temp;
+}
+
+
+NODE queue_insert(NODE first,int elem)
+{
+	NODE temp;
+	temp=getNode();
+	temp->info=elem;
+	temp->link=NULL;
+	if(first==NULL)
+	{
+		return temp;
+	}
+	NODE cur=first;
+	while(cur->link!=NULL)
+	{
+		cur=cur->link;
+	}
+	cur->link=temp;
+	return first;
+}
+
+NODE queue_delete(NODE first)
+{
+	if(first==NULL)
+	{
+		printf("No elements\n");
+		return NULL;
+	}
+	printf("%d deleted\n",first->info);
+	NODE temp=first->link;
+	free(first);
+	return temp;
+}
+
+
+
+
 int main()
 {
-  NODE first=NULL,second,third;
+  NODE first=NULL,second,third,Q=NULL,S=NULL;
   int elem,ch,pos;
   while(1)
   {
      printf("\n\n1.InsFr\n2.InsRe\n3.DelFr\n4.Delre\n5.display\n6.count\n7.copy\n8.concat\n-1.Clear SLL\n");
-     printf("9.Search\n");
+     printf("9.Search\n10.indexIns\n11.indexDel\n101~103.Stack operations\n201~203.Ordinary Queue operations\n");
      scanf("%d",&ch);
      switch(ch)
      {
@@ -246,8 +349,8 @@ int main()
         break; 
         
         case 7:
-		second=copy(first);
-		display(second);
+	   second=copy(first);
+	   display(second);
         break;
         
         case 8:
@@ -267,6 +370,53 @@ int main()
         first=insert(first,elem,pos);
         break;
         
+        case 11:
+        printf("Enter the index\n");
+        scanf("%d",&pos);
+        first=delete(first,pos);
+        break;
+        
+        case 101:
+        printf("Enter the element\n");
+        scanf("%d",&elem);
+        S = push(S,elem);
+        break;
+        
+        case 102:
+        S=pop(S);
+        break;
+
+        case 103:
+        display(S);
+        break;
+        
+        
+        case 201:
+        printf("Enter the element\n");
+        scanf("%d",&elem);
+        Q = queue_insert(Q,elem);
+        break;
+        
+        case 202:
+        Q = queue_delete(Q);
+        break;
+        
+        case 203:
+        display(Q);
+        break;
+        
+        
+        /*        
+        case 500:
+        system("clear");
+        break;
+        
+        case 501:
+        system("gedit");
+        break;
+        
+        */
+        
         case -1:
         first=clear(first);
         break;
@@ -276,6 +426,7 @@ int main()
    }
 }
        
+
 
 
 
